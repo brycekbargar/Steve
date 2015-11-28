@@ -1,0 +1,21 @@
+{
+  "name": "chuck-steve",
+  "version": "0.0.1",
+  "description": "A command line package manager for the ChucK language",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "directories": {
+    "bin": "./bin"
+  },
+  "preferGlobal": "true",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:brycekbargar/Steve"
+  },
+  "author": "Bryce",
+  "license": "MIT",
+  "dependencies": {
+  }
+}
