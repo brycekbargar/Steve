@@ -1,8 +1,8 @@
 {
   "name": "chuck-steve",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A command line package manager for the ChucK language",
-  "main": "./lib/index.js",
+  "keywords": [ "ChucK", "music", "audio" ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,5 +17,6 @@
   "author": "Bryce",
   "license": "MIT",
   "dependencies": {
+    "optimist": "^0.6.1"
   }
 }
