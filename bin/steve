@@ -4,7 +4,7 @@ var opt = require('optimist')
 'Manages ChucK packages\n\n' +
 'Usage: steve <command>\n\n' +
 'where <command> is one of:\n' +
-'  start, package, restore'
+'  start, package, install, watch, test, init'
   );
 var argv = opt.argv;
 
@@ -20,6 +20,18 @@ if(argv._ && argv._.length && argv._.length === 1) {
     }
     case 'restore': {
       require('./../lib/restore.js');
+      break;
+    }
+    case 'watch': {
+      require('./../lib/watch.js');
+      break;
+    }
+    case 'test': {
+      console.log('lol ChucK');
+      break;
+    }
+    case 'init': {
+      require('./../lib/init.js');
       break;
     }
     default: {

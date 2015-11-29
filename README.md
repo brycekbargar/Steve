@@ -34,7 +34,7 @@ This is by default the `main` file for ChucK packages. There is no need to inclu
 
 ### Steve commands ###
 
-##### `steve install` #####
+##### `steve restore` #####
 A thin wrapper for `npm install`
 
 ##### `steve init` #####
@@ -58,7 +58,8 @@ A thin wrapper for `npm init` which also sets `"private": true` in the `package.
 If the same dependency is required by the package or packages it depends on and they differ by a major version `steve` will refuse to start the app. If they have the same major version `steve` will only load the highest version.
 
 ##### `steve watch` #####
-Basically `steve start` except it watches the package folder for changes and then
+Basically `steve start` except it watches the package folder for changes and then  
+
 1. Replaces the changed files in the vm
 1. Replaces the `index.ck` file in the vm
 
