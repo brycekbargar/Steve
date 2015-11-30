@@ -6,10 +6,14 @@ var optimist = require('optimist')();
 var proxyquireStubs = { 'optimist': optimist };
 
 describe('For the steve executable', function() {
+  beforeEach('Setup console spies', function(){
+    this.logSpy = sinon.spy();
+    this.errorSpy = sinon.spy();
+  });
+  beforeEach('Setup steve', function(){
+    this.steve = proxyquire('./../lib/steve.js', proxyquireStubs)(this.logSpy, this.errorSpy);
+  });
   describe('expect the usage to be displayed when passed', function(){
-    beforeEach('Setup steve', function(){
-      this.steve = proxyquire('./../lib/steve.js', proxyquireStubs)(function(){}, function(){});
-    });
     beforeEach('Setup spy', function(){
       this.showHelpSpy = sinon.spy(optimist, 'showHelp');
     });
@@ -30,40 +34,35 @@ describe('For the steve executable', function() {
     });
   });
   describe('expect the correct command to be executed for', function(){
-    beforeEach('Setup spies', function(){
-      this.startSpy = proxyquireStubs['./start.js'] = sinon.spy();
-      this.packageSpy = proxyquireStubs['./package.js'] = sinon.spy();
-      this.restoreSpy = proxyquireStubs['./restore.js'] = sinon.spy();
-      this.watchSpy = proxyquireStubs['./watch.js'] = sinon.spy();
-      this.testSpy = proxyquireStubs['./test.js'] = sinon.spy();
-      this.initSpy = proxyquireStubs['./init.js'] = sinon.spy();
-    });
-    beforeEach('Setup steve', function(){
-      this.steve = proxyquire('./../lib/steve.js', proxyquireStubs)();
-    });
     it('start', function(){
+      var startSpy = proxyquireStubs['./start.js'] = sinon.spy();
       this.steve(['start']);
-      expect(this.startSpy).to.have.been.calledOnce;
+      expect(startSpy).to.have.been.calledOnce;
     });
     it('package', function(){
+      var packageSpy = proxyquireStubs['./package.js'] = sinon.spy();
       this.steve(['package']);
-      expect(this.packageSpy).to.have.been.calledOnce;
+      expect(packageSpy).to.have.been.calledOnce;
     });
     it('restore', function(){
+      var restoreSpy = proxyquireStubs['./restore.js'] = sinon.spy();
       this.steve(['restore']);
-      expect(this.restoreSpy).to.have.been.calledOnce;
+      expect(restoreSpy).to.have.been.calledOnce;
     });
     it('watch', function(){
+      var watchSpy = proxyquireStubs['./watch.js'] = sinon.spy();
       this.steve(['watch']);
-      expect(this.watchSpy).to.have.been.calledOnce;
+      expect(watchSpy).to.have.been.calledOnce;
     });
     it('test', function(){
+      var testSpy = proxyquireStubs['./test.js'] = sinon.spy();
       this.steve(['test']);
-      expect(this.testSpy).to.have.been.calledOnce;
+      expect(testSpy).to.have.been.calledOnce;
     });
     it('init', function(){
+      var initSpy = proxyquireStubs['./init.js'] = sinon.spy();
       this.steve(['init']);
-      expect(this.initSpy).to.have.been.calledOnce;
+      expect(initSpy).to.have.been.calledOnce;
     });
   });
 });

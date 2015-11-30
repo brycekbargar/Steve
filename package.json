@@ -5,7 +5,9 @@
   "keywords": [
     "ChucK",
     "music",
-    "audio"
+    "audio",
+    "package",
+    "manager"
   ],
   "scripts": {
     "test": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha; node_modules/.bin/eslint bin lib test"
