@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if ! which chuck > /dev/null; then
+  >&2 echo "Hey! You don't seem to have ChucK installed. This package really doesn't do anything without it..."
+  >&2 echo "You can find more info at http://chuck.cs.princeton.edu/"
+  >&2 echo "\n"
+fi
+
+exit 0
