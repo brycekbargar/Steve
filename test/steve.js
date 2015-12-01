@@ -44,11 +44,6 @@ describe('For the steve executable', function() {
       this.steve(['package']);
       expect(packageSpy).to.have.been.calledOnce;
     });
-    it('restore', function(){
-      var restoreSpy = proxyquireStubs['./restore.js'] = spy();
-      this.steve(['restore']);
-      expect(restoreSpy).to.have.been.calledOnce;
-    });
     it('watch', function(){
       var watchSpy = proxyquireStubs['./watch.js'] = spy();
       this.steve(['watch']);
