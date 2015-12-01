@@ -34,7 +34,7 @@ This is by default the `main` file for ChucK packages. There is no need to inclu
 
 ### Steve commands ###
 
-##### `steve restore` #####
+##### `steve restore` :shipit: #####
 A thin wrapper for `npm install`
 
 ##### `steve init` :shipit: #####
