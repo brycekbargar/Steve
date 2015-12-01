@@ -37,7 +37,7 @@ This is by default the `main` file for ChucK packages. There is no need to inclu
 ##### `steve restore` #####
 A thin wrapper for `npm install`
 
-##### `steve init` #####
+##### `steve init` :shipit: #####
 A thin wrapper for `npm init` which also sets `"private": true` in the `package.json` file
 
 ##### `steve package [version]` #####

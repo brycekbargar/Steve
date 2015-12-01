@@ -1,6 +1,6 @@
 {
   "name": "chuck-steve",
-  "version": "0.0.3-double.secret.alpha",
+  "version": "0.0.4-double.secret.alpha",
   "description": "A command line package manager for the ChucK language",
   "keywords": [
     "ChucK",
