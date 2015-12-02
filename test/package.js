@@ -10,10 +10,11 @@ describe('For the setup command', function() {
   beforeEach('Setup spies', function() {
     this.consoleErrorStub = stub(console, 'error');
     this.initializeFileStub = proxyquireStubs['chuck-steve-initialize-file'] = stub();
-    this.initializeFileStub.callsArgWith(1, null);
+    this.filePaths = ['','',''];
+    this.initializeFileStub.callsArgWith(1, null, this.filePaths);
     this.packageFolderStub = proxyquireStubs['chuck-steve-package-folder'] = stub();
-    this.packageFolderStub.callsArgWith(1, null);
-    this.packageFolderAddSpy = this.packageFolderStub.add = spy();
+    this.packageFolderAddSpy = spy();
+    this.packageFolderStub.callsArgWith(1, null, this.packageFolderAddSpy);
   });
   afterEach('Teardown spies', function(){
     console.error.restore();
@@ -80,6 +81,10 @@ describe('For the setup command', function() {
       it('expect silence', function() {
         this.package();
         expect(this.consoleErrorStub).to.not.have.been.called;
+      });
+      it('expect each returned initialize path to be added to the package folder', function(){
+        this.package();
+        expect(this.packageFolderAddSpy.callCount).to.equal(this.filePaths.length);
       });
     });
   });
