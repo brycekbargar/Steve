@@ -1,5 +1,6 @@
 var proxyquire = require('proxyquire').noCallThru();
 var sinon = require('sinon');
+var spy = sinon.spy;
 var stub = sinon.stub;
 var expect = require('chai').use(require('sinon-chai')).expect;
 
@@ -22,12 +23,21 @@ describe('For the setup command', function() {
       expect(this.initializeFileStub).to.have.been.calledOnce;
       expect(this.initializeFileStub).to.have.been.calledWith('./initialize.ck');
     });
-    it('the user to be alerted of errors', function() {
-      var initializeError = new Error();
-      this.initializeFileStub.callsArgWith(1, initializeError);
-      this.package();
-      expect(this.consoleErrorStub).to.have.been.calledOnce;
-      expect(this.consoleErrorStub).to.have.been.calledWith(initializeError);
+    describe('if there are errors', function(){
+      beforeEach('Setub spies', function(){
+        this.initializeError = new Error();
+        this.initializeFileStub.callsArgWith(1, this.initializeError);
+      });
+      it('the user to be alerted', function() {
+        this.package();
+        expect(this.consoleErrorStub).to.have.been.calledOnce;
+        expect(this.consoleErrorStub).to.have.been.calledWith(this.initializeError);
+      });
+      it('to not continue', function() {
+        var packageFolderSpy = proxyquireStubs['chuck-steve-package-folder'] = spy();
+        this.package();
+        expect(packageFolderSpy).to.not.have.been.called;
+      });
     });
     it('the user to not be alerted if things are ok', function() {
       this.initializeFileStub.callsArgWith(1, null);
