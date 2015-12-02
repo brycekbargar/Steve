@@ -10,14 +10,14 @@ wishful thinking or unbridled optimism or notes on a bar napkin. You should assu
 
 ### Steve commands ###
 
-##### `steve init` #####
+##### `steve init` :shipit: #####
 A thin wrapper for `npm init`.
 There are a couple of differences
 1. `index.ck` will be the default for `main`
 1. The `start/watch/prepulish` `scripts` will be prepopulated using `steve` commands
 1. There won't be any mention of test commands (one day I may write a runner/assertion library)
 
-##### `steve package` #####
+##### `steve package` :shipit: #####
 1. Creates the `package` folder or clears it if it exists
 1. Looks at `initialze.ck` and takes a note of the files to be loaded
 1. Copies each of the files found in the above step into the `package` folder prepending the order in `000_` fashion
