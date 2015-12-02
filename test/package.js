@@ -54,6 +54,7 @@ describe('For the setup command', function() {
     it('expect the folder to be loaded', function(){
       this.package();
       expect(this.packageFolderSpy).to.have.been.calledOnce;
+      expect(this.packageFolderSpy).to.have.been.calledWith('./package');
     });
   });
 });
