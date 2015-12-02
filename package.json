@@ -1,6 +1,6 @@
 {
   "name": "chuck-steve",
-  "version": "0.0.5-double.secret.alpha",
+  "version": "0.0.7-double.secret.alpha",
   "description": "A command line package manager for the ChucK language",
   "keywords": [
     "ChucK",
@@ -24,13 +24,9 @@
   "author": "Bryce",
   "license": "MIT",
   "dependencies": {
-    "fs": "0.0.2",
+    "chuck-steve-init": "^1.0.0",
     "npm": "^3.5.0",
-    "npm-package-arg": "^4.1.0",
-    "optimist": "^0.6.1",
-    "semver": "^5.1.0",
-    "validate-npm-package-license": "^3.0.1",
-    "validate-npm-package-name": "^2.2.2"
+    "optimist": "^0.6.1"
   },
   "devDependencies": {
     "chai": "^3.4.1",
