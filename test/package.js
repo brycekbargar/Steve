@@ -1,6 +1,5 @@
 var proxyquire = require('proxyquire').noCallThru();
 var sinon = require('sinon');
-var spy = sinon.spy;
 var stub = sinon.stub;
 var expect = require('chai').use(require('sinon-chai')).expect;
 
@@ -11,7 +10,7 @@ describe('For the setup command', function() {
     this.consoleErrorStub = stub(console, 'error');
     this.initializeFileStub = proxyquireStubs['chuck-steve-initialize-file'] = stub();
     this.initializeFileStub.callsArgWith(1, null);
-    this.packageFolderSpy = proxyquireStubs['chuck-steve-package-folder'] = spy();
+    this.packageFolderStub = proxyquireStubs['chuck-steve-package-folder'] = stub();
   });
   afterEach('Teardown spies', function(){
     console.error.restore();
@@ -37,7 +36,7 @@ describe('For the setup command', function() {
       });
       it('expect to not continue', function() {
         this.package();
-        expect(this.packageFolderSpy).to.not.have.been.called;
+        expect(this.packageFolderStub).to.not.have.been.called;
       });
       it('expect to exit with a 1', function() {
         var exitValue = this.package();
@@ -53,8 +52,23 @@ describe('For the setup command', function() {
   describe('when interacting with the package folder', function(){
     it('expect the folder to be loaded', function(){
       this.package();
-      expect(this.packageFolderSpy).to.have.been.calledOnce;
-      expect(this.packageFolderSpy).to.have.been.calledWith('./package');
+      expect(this.packageFolderStub).to.have.been.calledOnce;
+      expect(this.packageFolderStub).to.have.been.calledWith('./package');
+    });
+    describe('and there are errors', function(){
+      beforeEach('Setub spies', function(){
+        this.packageError = new Error();
+        this.packageFolderStub.callsArgWith(1, this.packageError);
+      });
+      it('expect the user to be alerted', function() {
+        this.package();
+        expect(this.consoleErrorStub).to.have.been.calledOnce;
+        expect(this.consoleErrorStub).to.have.been.calledWith(this.packageError);
+      });
+      it('expect to exit with a 1', function() {
+        var exitValue = this.package();
+        expect(exitValue).to.equal(1);
+      });
     });
   });
 });
