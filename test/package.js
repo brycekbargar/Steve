@@ -1,5 +1,6 @@
 var proxyquire = require('proxyquire').noCallThru();
 var sinon = require('sinon');
+var spy = sinon.spy;
 var stub = sinon.stub;
 var expect = require('chai').use(require('sinon-chai')).expect;
 
@@ -11,6 +12,7 @@ describe('For the setup command', function() {
     this.initializeFileStub = proxyquireStubs['chuck-steve-initialize-file'] = stub();
     this.initializeFileStub.callsArgWith(1, null);
     this.packageFolderStub = proxyquireStubs['chuck-steve-package-folder'] = stub();
+    this.packageFolderAddSpy = this.packageFolderStub.add = spy();
   });
   afterEach('Teardown spies', function(){
     console.error.restore();
@@ -64,6 +66,10 @@ describe('For the setup command', function() {
         this.package();
         expect(this.consoleErrorStub).to.have.been.calledOnce;
         expect(this.consoleErrorStub).to.have.been.calledWith(this.packageError);
+      });
+      it('expect to not continue', function() {
+        this.package();
+        expect(this.packageFolderAddSpy).to.not.have.been.called;
       });
       it('expect to exit with a 1', function() {
         var exitValue = this.package();
