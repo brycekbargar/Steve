@@ -1,5 +1,6 @@
 var proxyquire = require('proxyquire').noCallThru();
-var spy = require('sinon').spy;
+var sinon = require('sinon');
+var stub = sinon.stub;
 var expect = require('chai').use(require('sinon-chai')).expect;
 
 var proxyquireStubs = {};
@@ -10,12 +11,23 @@ describe('For the setup command', function() {
   });
   describe('when interacting with the initialize.ck file expect', function(){
     beforeEach('Setup spies', function(){
-      this.initializeFileSpy = proxyquireStubs['chuck-steve-initialize-file'] = spy();
+      this.initializeFileStub = proxyquireStubs['chuck-steve-initialize-file'] = stub();
+      this.initializeError = new Error();
+      this.initializeFileStub.callsArgWith(1, this.initializeError);
+      this.consoleErrorStub = stub(console, 'error');
     });
-    it('to load the file', function(){
+    afterEach('Teardown spies', function(){
+      console.error.restore();
+    });
+    it('the file to be loaded', function(){
       this.package();
-      expect(this.initializeFileSpy).to.have.been.calledOnce;
-      expect(this.initializeFileSpy).to.have.been.calledWith('./initialize.ck');
+      expect(this.initializeFileStub).to.have.been.calledOnce;
+      expect(this.initializeFileStub).to.have.been.calledWith('./initialize.ck');
+    });
+    it('the user to be alerted of errors', function() {
+      this.package();
+      expect(this.consoleErrorStub).to.have.been.calledOnce;
+      expect(this.consoleErrorStub).to.have.been.calledWith(this.initializeError);
     });
   });
 });
