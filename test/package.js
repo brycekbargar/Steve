@@ -12,8 +12,6 @@ describe('For the setup command', function() {
   describe('when interacting with the initialize.ck file expect', function(){
     beforeEach('Setup spies', function(){
       this.initializeFileStub = proxyquireStubs['chuck-steve-initialize-file'] = stub();
-      this.initializeError = new Error();
-      this.initializeFileStub.callsArgWith(1, this.initializeError);
       this.consoleErrorStub = stub(console, 'error');
     });
     afterEach('Teardown spies', function(){
@@ -25,9 +23,16 @@ describe('For the setup command', function() {
       expect(this.initializeFileStub).to.have.been.calledWith('./initialize.ck');
     });
     it('the user to be alerted of errors', function() {
+      var initializeError = new Error();
+      this.initializeFileStub.callsArgWith(1, initializeError);
       this.package();
       expect(this.consoleErrorStub).to.have.been.calledOnce;
-      expect(this.consoleErrorStub).to.have.been.calledWith(this.initializeError);
+      expect(this.consoleErrorStub).to.have.been.calledWith(initializeError);
+    });
+    it('the user to not be alerted if things are ok', function() {
+      this.initializeFileStub.callsArgWith(1, null);
+      this.package();
+      expect(this.consoleErrorStub).to.not.have.been.called;
     });
   });
 });
