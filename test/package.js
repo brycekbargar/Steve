@@ -12,6 +12,7 @@ describe('For the setup command', function() {
     this.initializeFileStub = proxyquireStubs['chuck-steve-initialize-file'] = stub();
     this.initializeFileStub.callsArgWith(1, null);
     this.packageFolderStub = proxyquireStubs['chuck-steve-package-folder'] = stub();
+    this.packageFolderStub.callsArgWith(1, null);
     this.packageFolderAddSpy = this.packageFolderStub.add = spy();
   });
   afterEach('Teardown spies', function(){
@@ -46,7 +47,6 @@ describe('For the setup command', function() {
       });
     });
     it('and there are no errors expect silence', function() {
-      this.initializeFileStub.callsArgWith(1, null);
       this.package();
       expect(this.consoleErrorStub).to.not.have.been.called;
     });
@@ -74,6 +74,12 @@ describe('For the setup command', function() {
       it('expect to exit with a 1', function() {
         var exitValue = this.package();
         expect(exitValue).to.equal(1);
+      });
+    });
+    describe('and there are no errors', function() {
+      it('expect silence', function() {
+        this.package();
+        expect(this.consoleErrorStub).to.not.have.been.called;
       });
     });
   });
