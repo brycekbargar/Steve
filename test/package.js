@@ -15,6 +15,7 @@ describe('For the setup command', function() {
     it('to load the file', function(){
       this.package();
       expect(this.initializeFileSpy).to.have.been.calledOnce;
+      expect(this.initializeFileSpy).to.have.been.calledWith('./initialize.ck');
     });
   });
 });
