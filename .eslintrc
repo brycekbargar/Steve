@@ -11,8 +11,21 @@ rules:
   semi:
     - 2
     - always
+  no-var:
+    - 2
   no-console:
     - 0
+ecmaFeatures:
+  arrowFunctions:
+    - 2
+  modules:
+    - 2
+  blockBindings:
+    - 2
+  templateStrings:
+    - 2
+  classes:
+    - 2
 env:
   node: true
   mocha: true

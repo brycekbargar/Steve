@@ -1,3 +1,5 @@
 #!/usr/bin/env node
-var steve = require('./../lib/steve.js')();
+'use strict';
+
+let steve = require('./../lib/steve.js')();
 steve();
