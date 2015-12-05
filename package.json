@@ -25,7 +25,9 @@
   "license": "MIT",
   "dependencies": {
     "chuck-steve-init": "^1.0.0",
-    "npm": "^3.5.0",
+    "chuck-steve-initialize-file": "^1.0.1",
+    "eslint": "^1.10.3",
+    "npm": "^3.5.2",
     "optimist": "^0.6.1"
   },
   "devDependencies": {
