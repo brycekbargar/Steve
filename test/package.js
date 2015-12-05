@@ -9,12 +9,19 @@ var proxyquireStubs = {};
 describe('For the setup command', function() {
   beforeEach('Setup spies', function() {
     this.consoleErrorStub = stub(console, 'error');
+
     this.initializeFileStub = proxyquireStubs['chuck-steve-initialize-file'] = stub();
     this.filePaths = ['','',''];
     this.initializeFileStub.callsArgWith(1, null, this.filePaths);
+
     this.packageFolderStub = proxyquireStubs['chuck-steve-package-folder'] = stub();
+    this.packageFolderClearSpy = spy();
     this.packageFolderAddSpy = spy();
-    this.packageFolderStub.callsArgWith(1, null, this.packageFolderAddSpy);
+    var packageFolder = {
+      clear: this.packageFolderClearSpy,
+      add: this.packageFolderAddSpy
+    };
+    this.packageFolderStub.callsArgWith(1, null, packageFolder);
   });
   afterEach('Teardown spies', function(){
     console.error.restore();
@@ -70,6 +77,7 @@ describe('For the setup command', function() {
       });
       it('expect to not continue', function() {
         this.package();
+        expect(this.packageFolderClearSpy).to.not.have.been.called;
         expect(this.packageFolderAddSpy).to.not.have.been.called;
       });
       it('expect to exit with a 1', function() {
@@ -81,6 +89,10 @@ describe('For the setup command', function() {
       it('expect silence', function() {
         this.package();
         expect(this.consoleErrorStub).to.not.have.been.called;
+      });
+      it('expect the package folder to be cleared', function(){
+        this.package();
+        expect(this.packageFolderClearSpy).to.have.been.called;
       });
       it('expect each returned initialize path to be added to the package folder', function(){
         this.package();
