@@ -1,7 +1,9 @@
 'use strict';
 
 const proxyquire =  require('proxyquire').noCallThru();
-const spy = require('sinon').spy;
+const sinon = require('sinon');
+const spy = sinon.spy;
+const stub = sinon.stub;
 const expect = require('chai').use(require('sinon-chai')).expect;
 
 const optimist = require('optimist')();
@@ -31,28 +33,47 @@ describe('For the steve executable', () => {
       expect(this.showHelpSpy).to.have.been.calledOnce;
     });
   });
-  describe('expect the correct command to be executed for', () => {
-    it('start', () => {
-      let startSpy = proxyquireStubs['./start.js'] = spy();
-      this.steve(['start']);
-      expect(startSpy).to.have.been.calledOnce;
+  describe('and the command given is', () => {
+    describe('start', () => {
+      beforeEach('Setup spies', () => this.startStub = proxyquireStubs['./start.js'] = stub());
+      it('expect it to be executed', () => {
+        this.steve(['start']);
+        expect(this.startStub).to.have.been.calledOnce;
+      });
+      describe('expect the correct exit status for', () => {
+        it('success', () => {
+          this.startStub.returns(0);
+          let status = this.steve(['start']);
+          expect(status).to.equal(0);
+        });
+        it('failure', () => {
+          this.startStub.returns(1);
+          let status = this.steve(['start']);
+          expect(status).to.equal(1);
+        });
+        it('exception', () => {
+          this.startStub.throws(new Error());
+          let status = this.steve(['start']);
+          expect(status).to.equal(1);
+        });
+      });
     });
-    it('package', () => {
+    it('package expect execution', () => {
       let packageSpy = proxyquireStubs['./package.js'] = spy();
       this.steve(['package']);
       expect(packageSpy).to.have.been.calledOnce;
     });
-    it('watch', () => {
+    it('watch expect execution', () => {
       let watchSpy = proxyquireStubs['./watch.js'] = spy();
       this.steve(['watch']);
       expect(watchSpy).to.have.been.calledOnce;
     });
-    it('test', () => {
+    it('test expect execution', () => {
       let testSpy = proxyquireStubs['./test.js'] = spy();
       this.steve(['test']);
       expect(testSpy).to.have.been.calledOnce;
     });
-    it('init', () => {
+    it('init expect execution', () => {
       let initSpy = proxyquireStubs['./init.js'] = spy();
       this.steve(['init']);
       expect(initSpy).to.have.been.calledOnce;
