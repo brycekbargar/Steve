@@ -2,6 +2,7 @@
 
 const proxyquire =  require('proxyquire').noCallThru();
 const sinon = require('sinon');
+require('sinon-as-promised')(require('bluebird'));
 const spy = sinon.spy;
 const stub = sinon.stub;
 const expect = require('chai').use(require('sinon-chai')).expect;
@@ -36,32 +37,45 @@ describe('For the steve executable', () => {
   describe('and the command given is', () => {
     describe('start', () => {
       beforeEach('Setup spies', () => this.startStub = proxyquireStubs['./start.js'] = stub());
-      it('expect it to be executed', () => {
+      it('expect execution', () => {
         this.steve(['start']);
         expect(this.startStub).to.have.been.calledOnce;
       });
       describe('expect the correct exit status for', () => {
         it('success', () => {
-          this.startStub.returns(0);
           let status = this.steve(['start']);
           expect(status).to.equal(0);
         });
-        it('failure', () => {
-          this.startStub.returns(1);
-          let status = this.steve(['start']);
-          expect(status).to.equal(1);
-        });
         it('exception', () => {
-          this.startStub.throws(new Error());
+          let error = new Error();
+          this.startStub.throws(error);
           let status = this.steve(['start']);
+          expect(this.errorSpy).to.have.been.calledWith(error);
           expect(status).to.equal(1);
         });
       });
     });
-    it('package expect execution', () => {
-      let packageSpy = proxyquireStubs['./package.js'] = spy();
-      this.steve(['package']);
-      expect(packageSpy).to.have.been.calledOnce;
+    describe('package', () => {
+      beforeEach('Setup spies', () => this.packageStub = proxyquireStubs['./package.js'] = stub());
+      it('expect execution', () => {
+        this.packageStub.resolves();
+        this.steve(['package']);
+        expect(this.packageStub).to.have.been.calledOnce;
+      });
+      describe('expect the correct exit status for', () => {
+        it('success', () => {
+          this.packageStub.resolves();
+          let status = this.steve(['package']);
+          expect(status).to.equal(0);
+        });
+        it('exception', () => {
+          // no idea how to test this...
+          let error = new Error();
+          this.packageStub.rejects(error);
+          let status = this.steve(['package']);
+          expect(status).to.equal(1);
+        });
+      });
     });
     it('watch expect execution', () => {
       let watchSpy = proxyquireStubs['./watch.js'] = spy();
