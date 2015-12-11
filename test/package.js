@@ -3,14 +3,17 @@
 const proxyquire = require('proxyquire').noCallThru();
 const Promise = require('bluebird');
 require('sinon-as-promised')(Promise);
-const stub = require('sinon').stub;
+const sinon = require('sinon');
+const spy = sinon.spy;
+const stub = sinon.stub;
 const expect = require('chai')
     .use(require('sinon-chai'))
     .use(require('chai-as-promised'))
     .expect;
 
 const proxyquireStubs = {
-  bluebird: Promise
+  bluebird: Promise,
+  path: {}
 };
 
 describe('For the package command', () => {
@@ -32,6 +35,8 @@ describe('For the package command', () => {
       });
     this.packageFolderClearStub.resolves();
     this.packageFolderAddStub.resolves();
+
+    this.resolveSpy = proxyquireStubs.path.resolve = spy();
   });
   beforeEach('Setup package', () =>
     this.package = proxyquire('./../lib/package.js', proxyquireStubs)
@@ -41,7 +46,7 @@ describe('For the package command', () => {
       this.package();
       expect(this.initializeFileStub).to.have.been.calledOnce;
       expect(this.initializeFileStub).to.have.been.calledWithNew;
-      expect(this.initializeFileStub).to.have.been.calledWith('./initialize.ck');
+      expect(this.resolveSpy).to.have.been.calledWith('./initialize.ck');
     });
     describe('and there are errors', () => {
       beforeEach('Setup spies', () => {
@@ -66,7 +71,7 @@ describe('For the package command', () => {
       this.package();
       expect(this.packageFolderStub).to.have.been.calledOnce;
       expect(this.packageFolderStub).to.have.been.calledWithNew;
-      expect(this.packageFolderStub).to.have.been.calledWith('./package');
+      expect(this.resolveSpy).to.have.been.calledWith('./package');
     });
     describe('expect it to be rejected if there are errors', () => {
       it('clearing the folder', () => {
