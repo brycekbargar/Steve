@@ -5,7 +5,10 @@ const sinon = require('sinon');
 require('sinon-as-promised')(require('bluebird'));
 const spy = sinon.spy;
 const stub = sinon.stub;
-const expect = require('chai').use(require('sinon-chai')).expect;
+const expect = require('chai')
+  .use(require('sinon-chai'))
+  .use(require('chai-as-promised'))
+  .expect;
 
 const optimist = require('optimist')();
 const proxyquireStubs = { 'optimist': optimist };
@@ -44,36 +47,45 @@ describe('For the steve executable', () => {
       describe('expect the correct exit status for', () => {
         it('success', () => {
           let status = this.steve(['start']);
-          expect(status).to.equal(0);
+          expect(status).to.be.resolved;
+        });
+        it('failure', () => {
+          this.startStub.returns(0);
+          let status = this.steve(['start']);
+          expect(status).to.be.rejected;
         });
         it('exception', () => {
           let error = new Error();
           this.startStub.throws(error);
           let status = this.steve(['start']);
-          expect(this.errorSpy).to.have.been.calledWith(error);
-          expect(status).to.equal(1);
+          expect(status).to.be.rejectedWith(error);
         });
       });
     });
     describe('package', () => {
       beforeEach('Setup spies', () => this.packageStub = proxyquireStubs['./package.js'] = stub());
       it('expect execution', () => {
-        this.packageStub.resolves();
+        this.packageStub.resolves(0);
         this.steve(['package']);
         expect(this.packageStub).to.have.been.calledOnce;
       });
       describe('expect the correct exit status for', () => {
         it('success', () => {
-          this.packageStub.resolves();
+          this.packageStub.resolves(0);
           let status = this.steve(['package']);
-          expect(status).to.equal(0);
+          expect(status).to.be.resolved;
+        });
+        it('failure', () => {
+          this.packageStub.resolves(1);
+          let status = this.steve(['package']);
+          expect(status).to.be.rejected;
         });
         it('exception', () => {
           // no idea how to test this...
           let error = new Error();
           this.packageStub.rejects(error);
           let status = this.steve(['package']);
-          expect(status).to.equal(1);
+          expect(status).to.be.rejectedWith(error);
         });
       });
     });
