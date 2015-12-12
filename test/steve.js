@@ -14,12 +14,8 @@ const optimist = require('optimist')();
 const proxyquireStubs = { 'optimist': optimist };
 
 describe('For the steve executable', () => {
-  beforeEach('Setup console spies', () => {
-    this.logSpy = spy();
-    this.errorSpy = spy();
-  });
   beforeEach('Setup steve', () =>
-    this.steve = proxyquire('./../lib/steve.js', proxyquireStubs)(this.logSpy, this.errorSpy)
+    this.steve = proxyquire('./../lib/steve.js', proxyquireStubs)()
   );
   describe('expect the usage to be displayed when passed', () => {
     beforeEach('Setup spy', () => this.showHelpSpy = spy(optimist, 'showHelp'));
