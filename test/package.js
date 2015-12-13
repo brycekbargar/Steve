@@ -30,9 +30,11 @@ describe('For the package command', () => {
       proxyquireStubs['chuck-steve-package-folder'] =
       stub())
       .returns({
+        isValid: this.packageFolderIsValidStub = stub(),
         clear: this.packageFolderClearStub = stub(),
         add: this.packageFolderAddStub = stub()
       });
+    this.packageFolderIsValidStub.resolves(true);
     this.packageFolderClearStub.resolves();
     this.packageFolderAddStub.resolves();
 
@@ -74,6 +76,25 @@ describe('For the package command', () => {
       expect(this.resolveSpy).to.have.been.calledWith('./package');
     });
     describe('expect it to be rejected if there are errors', () => {
+      describe('validating the folder', () => {
+        it('because of an error', () => {
+          let isValidError = new Error();
+          this.packageFolderIsValidStub.rejects(isValidError);
+          let pkg = this.package();
+          return pkg.catch(() => {
+            expect(pkg).to.be.rejectedWith(isValidError);
+            expect(this.packageFolderClearStub).to.not.have.been.called;
+          });
+        });
+        it('because it is invalid', () => {
+          this.packageFolderIsValidStub.resolves(false);
+          let pkg = this.package();
+          return pkg.catch(() => {
+            expect(pkg).to.be.rejected;
+            expect(this.packageFolderClearStub).to.not.have.been.called;
+          });
+        });
+      });
       it('clearing the folder', () => {
         let clearError = new Error();
         this.packageFolderClearStub.rejects(clearError);
@@ -91,6 +112,10 @@ describe('For the package command', () => {
       });
     });
     describe('and there are no errors', () => {
+      it('expect the package folder to be validated', () => {
+        let pkg = this.package();
+        return pkg.then(() => expect(this.packageFolderIsValidStub).to.have.been.called);
+      });
       it('expect the package folder to be cleared', () => {
         let pkg = this.package();
         return pkg.then(() => expect(this.packageFolderClearStub).to.have.been.called);
