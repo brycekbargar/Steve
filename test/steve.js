@@ -2,7 +2,8 @@
 
 const proxyquire =  require('proxyquire').noCallThru();
 const sinon = require('sinon');
-require('sinon-as-promised')(require('bluebird'));
+const Promise = require('bluebird');
+require('sinon-as-promised')(Promise);
 const spy = sinon.spy;
 const stub = sinon.stub;
 const expect = require('chai')
@@ -11,7 +12,7 @@ const expect = require('chai')
   .expect;
 
 const optimist = require('optimist')();
-const proxyquireStubs = { 'optimist': optimist };
+const proxyquireStubs = { 'optimist': optimist, 'bluebird': Promise };
 
 describe('For the steve executable', () => {
   beforeEach('Setup steve', () =>
@@ -52,7 +53,7 @@ describe('For the steve executable', () => {
           expect(status).to.be.resolved;
         });
         it('failure', () => {
-          this.startStub.returns(0);
+          this.startStub.returns(1);
           let status = this.steve(['start']);
           expect(status).to.be.rejected;
         });
