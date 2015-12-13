@@ -25,17 +25,16 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.0.6",
-    "chuck-steve-init": "^1.0.0",
+    "chuck-steve-init": "^1.0.1",
     "chuck-steve-initialize-file": "^2.0.0",
     "chuck-steve-package-folder": "^1.0.0",
-    "eslint": "^1.10.3",
-    "npm": "^3.5.2",
+    "npm": "^3.5.3",
     "optimist": "^0.6.1"
   },
   "devDependencies": {
     "chai": "^3.4.1",
     "chai-as-promised": "^5.1.0",
-    "eslint": "^1.10.2",
+    "eslint": "^1.10.3",
     "istanbul": "^0.4.1",
     "mocha": "^2.3.4",
     "proxyquire": "^1.7.3",
