@@ -18,8 +18,14 @@ describe('For the steve executable', () => {
     this.steve = proxyquire('./../lib/steve.js', proxyquireStubs)()
   );
   describe('expect the usage to be displayed when passed', () => {
-    beforeEach('Setup spy', () => this.showHelpSpy = spy(optimist, 'showHelp'));
-    afterEach('Teardown spy', () => optimist.showHelp.restore());
+    beforeEach('Setup Spies', () => {
+      this.consoleErrorStub = stub(console, 'error');
+      this.showHelpSpy = spy(optimist, 'showHelp');
+    });
+    afterEach('Teardown spy', () => {
+      this.consoleErrorStub.restore();
+      optimist.showHelp.restore();
+    });
     it('no commands', () => {
       this.steve([]);
       expect(this.showHelpSpy).to.have.been.calledOnce;
@@ -77,7 +83,6 @@ describe('For the steve executable', () => {
           expect(status).to.be.rejected;
         });
         it('exception', () => {
-          // no idea how to test this...
           let error = new Error();
           this.packageStub.rejects(error);
           let status = this.steve(['package']);
@@ -96,9 +101,11 @@ describe('For the steve executable', () => {
       expect(testSpy).to.have.been.calledOnce;
     });
     it('init expect execution', () => {
-      let initSpy = proxyquireStubs['./init.js'] = spy();
-      this.steve(['init']);
-      expect(initSpy).to.have.been.calledOnce;
+      let initStub = proxyquireStubs['./init.js'] = stub();
+      initStub.resolves();
+      let init = this.steve(['init']);
+      expect(initStub).to.have.been.calledOnce;
+      expect(init).to.have.been.resolved;
     });
   });
 });
