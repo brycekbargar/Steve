@@ -90,10 +90,12 @@ describe('For the steve executable', () => {
         });
       });
     });
-    it('watch expect execution', () => {
-      let watchSpy = proxyquireStubs['./watch.js'] = spy();
-      this.steve(['watch']);
-      expect(watchSpy).to.have.been.calledOnce;
+    it('publish expect execution', () => {
+      let publishStub = proxyquireStubs['./publish.js'] = stub();
+      publishStub.resolves();
+      let publish = this.steve(['publish']);
+      expect(publishStub).to.have.been.calledOnce;
+      expect(publish).to.have.been.resolved;
     });
     it('test expect execution', () => {
       let testSpy = proxyquireStubs['./test.js'] = spy();

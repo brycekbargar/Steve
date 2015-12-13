@@ -31,11 +31,8 @@ There are a couple of differences
 *A small note on dependencies*  
 Since ChucK has no concept of namespaces or scope if the same dependency is required by the package or packages it depends on and they differ by a major version `steve` will refuse to start the app. If they have the same major version `steve` will only load the highest version. You should follow `semver` and backwards compatibility religiously.
 
-##### `steve watch` #####
-Basically `steve start` except it watches the package folder for changes and then  
-
-1. Replaces the changed files in the vm
-1. Replaces the `index.ck` file in the vm
+##### `steve publish` #####
+A thin wrapper for `steve package && npm publish`;
 
 ##### `steve test` :shipit: ######
 lol ChucK
