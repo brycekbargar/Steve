@@ -5,7 +5,10 @@ const sinon = require('sinon');
 const Promise = require('bluebird');
 require('sinon-as-promised')(Promise);
 const stub = sinon.stub;
-const expect = require('chai').use(require('sinon-chai')).expect;
+const expect = require('chai')
+  .use(require('sinon-chai'))
+  .use(require('chai-as-promised'))
+  .expect;
 
 const proxyquireStubs = {
   'bluebird': Promise
@@ -13,44 +16,30 @@ const proxyquireStubs = {
 
 describe('For the start command', () => {
   beforeEach('Setup spies', () => {
-    (proxyquireStubs['chuck-steve-vm-manager'] =
-      this.chuckVmStub =
-      stub())
+    (proxyquireStubs['chuck-steve-vm-manager'] = stub())
       .returns({
-        start: this.vmStartStub = stub()
+        start: this.vmStartStub = stub(),
+        add: this.vmAddStub = stub()
       });
-    (proxyquireStubs['chuck-steve-dependency-tree'] =
-      this.dependencyTreeStub =
-      stub())
+    (proxyquireStubs['chuck-steve-package'] = stub())
       .returns({
-        load: this.dependencyTreeLoadStub = stub()
+        getAllDependencyPaths: this.getAllDependencyPathsStub = stub()
       });
     this.vmStartStub.resolves();
-    this.dependencyTreeLoadStub.resolves();
+    this.vmAddStub.resolves();
+    this.getAllDependencyPathsStub.resolves(['', '', '']);
   });
   beforeEach('Setup command', () => this.start = proxyquire('./../lib/start.js', proxyquireStubs));
-  it('expect it to create a new vm', () => {
+  it('expect it to start the vm', () => {
     this.start();
-    expect(this.chuckVmStub).to.have.been.calledOnce;
-    expect(this.chuckVmStub).to.have.been.calledWithNew;
+    expect(this.vmStartStub).to.have.been.calledOnce;
   });
-  it('expect it to create a new dependency tree', () => {
-    this.start();
-    expect(this.dependencyTreeStub).to.have.been.calledOnce;
-    expect(this.dependencyTreeStub).to.have.been.calledWithNew;
-  });
-  it('expect it to be rejected if it can\'t start the vm', () => {
-    let startError = new Error();
-    this.vmStartStub.rejects(startError);
+  it('expect it to get the dependencies', () => {
     let start = this.start();
-    expect(start).to.have.been.rejectedWith(startError);
+    return start.then(() => expect(this.getAllDependencyPathsStub).to.have.been.calledOnce);
   });
-  describe('and the vm is started', () => {
-    it('expect it to be rejected if it can\'t load the dependency tree', () => {
-      let dependencyError = new Error();
-      this.dependencyTreeLoadStub.rejects(dependencyError);
-      let start = this.start();
-      expect(start).to.have.been.rejectedWith(dependencyError);
-    });
+  it('expect it to add each dependency path to the vm', () => {
+    let start = this.start();
+    return start.then(() => expect(this.vmAddStub).to.have.been.calledThrice);
   });
 });
