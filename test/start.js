@@ -25,9 +25,14 @@ describe('For the start command', () => {
       .returns({
         getAllDependencyPaths: this.getAllDependencyPathsStub = stub()
       });
+    (proxyquireStubs['chuck-steve-initialize-file'] = stub())
+      .returns({
+        getFilePaths: this.getFilePathsStub = stub()
+      });
     this.vmStartStub.resolves();
     this.vmAddStub.resolves();
-    this.getAllDependencyPathsStub.resolves(['', '', '']);
+    this.getAllDependencyPathsStub.resolves(['dep1.ck', 'dep2.ck', 'dep3.ck']);
+    this.getAllDependencyPathsStub.resolves(['init1.ck', 'init2.ck', 'init3.ck']);
   });
   beforeEach('Setup command', () => this.start = proxyquire('./../lib/start.js', proxyquireStubs));
   it('expect it to start the vm', () => {
@@ -37,6 +42,10 @@ describe('For the start command', () => {
   it('expect it to get the dependencies', () => {
     let start = this.start();
     return start.then(() => expect(this.getAllDependencyPathsStub).to.have.been.calledOnce);
+  });
+  it('expect it to get the initialize files', () => {
+    let start = this.start();
+    return start.then(() => expect(this.getFilePathsStub).to.have.been.calledOnce);
   });
   it('expect it to add each dependency path to the vm', () => {
     let start = this.start();
