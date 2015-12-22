@@ -2,17 +2,14 @@
 
 const proxyquire = require('proxyquire').noCallThru();
 const sinon = require('sinon');
-const Promise = require('bluebird');
-require('sinon-as-promised')(Promise);
+require('sinon-as-promised');
 const stub = sinon.stub;
 const expect = require('chai')
   .use(require('sinon-chai'))
   .use(require('chai-as-promised'))
   .expect;
 
-const proxyquireStubs = {
-  'bluebird': Promise
-};
+const proxyquireStubs = { };
 
 describe('For the start command', () => {
   beforeEach('Setup spies', () => {
