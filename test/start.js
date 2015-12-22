@@ -31,8 +31,9 @@ describe('For the start command', () => {
       });
     this.vmStartStub.resolves();
     this.vmAddStub.resolves();
-    this.getAllDependencyPathsStub.resolves(['dep1.ck', 'dep2.ck', 'dep3.ck']);
-    this.getAllDependencyPathsStub.resolves(['init1.ck', 'init2.ck', 'init3.ck']);
+    this.chuckFiles = ['dep1.ck', 'dep2.ck', 'dep3.ck', 'init.ck'];
+    this.getAllDependencyPathsStub.resolves(this.chuckFiles.slice(0,3));
+    this.getFilePathsStub.resolves(this.chuckFiles.slice(3, 4));
   });
   beforeEach('Setup command', () => this.start = proxyquire('./../lib/start.js', proxyquireStubs));
   it('expect it to start the vm', () => {
@@ -49,6 +50,6 @@ describe('For the start command', () => {
   });
   it('expect it to add each dependency path to the vm', () => {
     let start = this.start();
-    return start.then(() => expect(this.vmAddStub).to.have.been.calledThrice);
+    return start.then(() => expect(this.vmAddStub.getCalls().map(call => call.args[0])).to.eql(this.chuckFiles));
   });
 });
