@@ -33,7 +33,7 @@ describe('For the start command', () => {
     this.vmStartStub.resolves();
     this.vmAddStub.resolves();
     this.chuckFiles = ['dep1.ck', 'dep2.ck', 'dep3.ck', 'init.ck', 'MAAAIN.ck'];
-    this.mainStub.resolves(this.chuckFiles[4]);
+    this.mainStub.resolves(this.chuckFiles.slice(-1));
     this.getAllDependencyPathsStub.resolves(this.chuckFiles.slice(0,3));
     this.getFilePathsStub.resolves(this.chuckFiles.slice(3, 4));
   });
